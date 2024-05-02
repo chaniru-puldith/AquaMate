@@ -109,7 +109,7 @@ const arowanaJson = {
 };
 
 const angleJson = {
-  'fishName': 'Anglefish',
+  'fishName': 'Angelfish',
   'scientificName': 'Pterophyllum',
   'ph': 'pH 6.0-6.8',
   'temp': '75-80°F (24-27°C)',

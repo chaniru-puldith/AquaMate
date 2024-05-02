@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aquamate/models/fish_data_model.dart';
+import 'package:aquamate/screens/breed_identification_screen.dart';
 import 'package:aquamate/screens/fish_details_screen.dart';
 import 'package:aquamate/utils/constants.dart';
 import 'package:aquamate/widgets/about_card_button.dart';
@@ -41,9 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _tfLteInit();
     super.initState();
-    getCurrentUser();
+    _getCurrentUser();
     _database.ref('users/${_loggedInUser.uid}/name').onValue.listen((event) {
       if (event.snapshot.exists) {
         setState(() {
@@ -53,25 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    Tflite.close();
-    super.dispose();
-  }
-
-  Future<void> _tfLteInit() async {
-    String? res = await Tflite.loadModel(
-        model: "assets/model/fish_breed.tflite",
-        labels: "assets/model/breed_labels.txt",
-        numThreads: 1, // defaults to 1
-        isAsset:
-            true, // defaults to true, set to false to load resources outside assets
-        useGpuDelegate:
-            false // defaults to false, set to true to use GPU delegate
-        );
-  }
-
-  void getCurrentUser() async {
+  void _getCurrentUser() async {
     try {
       final user = _auth.currentUser;
       if (user != null) {
@@ -87,200 +69,200 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _showBreedImagePicker(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (builder) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5.2,
-                margin: const EdgeInsets.only(top: 8.0),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                decoration: BoxDecoration(
-                  color: kSecondaryColor,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Material(
-                        color: kSecondaryColor,
-                        child: InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.photo_library_outlined,
-                                  size: 22.0,
-                                ),
-                                kSizedBoxW10,
-                                Text(
-                                  "Gallery",
-                                  textAlign: TextAlign.center,
-                                  style: kFilledButtonTextStyle.copyWith(
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            _imgBreedFromGallery();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    )),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Divider(
-                        color: Colors.black12,
-                      ),
-                    ),
-                    Expanded(
-                        child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Material(
-                        color: kSecondaryColor,
-                        child: InkWell(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 22.0,
-                                ),
-                                kSizedBoxW10,
-                                Text(
-                                  "Camera",
-                                  textAlign: TextAlign.center,
-                                  style: kFilledButtonTextStyle.copyWith(
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            print('hello');
-                            _imgBreedFromCamera();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ))
-                  ],
-                )),
-          );
-        });
-  }
-
-  void _showDiseaseImagePicker(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (builder) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5.2,
-                margin: const EdgeInsets.only(top: 8.0),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-                decoration: BoxDecoration(
-                    color: kSecondaryColor,
-                    borderRadius: BorderRadius.circular(25)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Material(
-                        color: kSecondaryColor,
-                        child: InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.photo_library_outlined,
-                                  size: 22.0,
-                                ),
-                                kSizedBoxW10,
-                                Text(
-                                  "Gallery",
-                                  textAlign: TextAlign.center,
-                                  style: kFilledButtonTextStyle.copyWith(
-                                      color: Colors.black),
-                                )
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            _imgDiseaseFromGallery();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    )),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Divider(
-                        color: Colors.black12,
-                      ),
-                    ),
-                    Expanded(
-                        child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Material(
-                        color: kSecondaryColor,
-                        child: InkWell(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.camera_alt_outlined,
-                                  size: 22.0,
-                                ),
-                                kSizedBoxW10,
-                                Text(
-                                  "Camera",
-                                  textAlign: TextAlign.center,
-                                  style: kFilledButtonTextStyle.copyWith(
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            _imgDiseaseFromCamera();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ))
-                  ],
-                )),
-          );
-        });
-  }
+  // void _showBreedImagePicker(BuildContext context) {
+  //   showModalBottomSheet(
+  //       backgroundColor: Colors.transparent,
+  //       context: context,
+  //       builder: (builder) {
+  //         return Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Container(
+  //               width: MediaQuery.of(context).size.width,
+  //               height: MediaQuery.of(context).size.height / 5.2,
+  //               margin: const EdgeInsets.only(top: 8.0),
+  //               padding:
+  //                   const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+  //               decoration: BoxDecoration(
+  //                 color: kSecondaryColor,
+  //                 borderRadius: BorderRadius.circular(25),
+  //               ),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Expanded(
+  //                       child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15),
+  //                     child: Material(
+  //                       color: kSecondaryColor,
+  //                       child: InkWell(
+  //                         child: Padding(
+  //                           padding: const EdgeInsets.symmetric(horizontal: 10),
+  //                           child: Row(
+  //                             children: [
+  //                               const Icon(
+  //                                 Icons.photo_library_outlined,
+  //                                 size: 22.0,
+  //                               ),
+  //                               kSizedBoxW10,
+  //                               Text(
+  //                                 "Gallery",
+  //                                 textAlign: TextAlign.center,
+  //                                 style: kFilledButtonTextStyle.copyWith(
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               )
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         onTap: () {
+  //                           _imgBreedFromGallery();
+  //                           Navigator.pop(context);
+  //                         },
+  //                       ),
+  //                     ),
+  //                   )),
+  //                   const Padding(
+  //                     padding: EdgeInsets.symmetric(horizontal: 15.0),
+  //                     child: Divider(
+  //                       color: Colors.black12,
+  //                     ),
+  //                   ),
+  //                   Expanded(
+  //                       child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15),
+  //                     child: Material(
+  //                       color: kSecondaryColor,
+  //                       child: InkWell(
+  //                         child: Padding(
+  //                           padding:
+  //                               const EdgeInsets.symmetric(horizontal: 10.0),
+  //                           child: Row(
+  //                             crossAxisAlignment: CrossAxisAlignment.center,
+  //                             children: [
+  //                               const Icon(
+  //                                 Icons.camera_alt_outlined,
+  //                                 size: 22.0,
+  //                               ),
+  //                               kSizedBoxW10,
+  //                               Text(
+  //                                 "Camera",
+  //                                 textAlign: TextAlign.center,
+  //                                 style: kFilledButtonTextStyle.copyWith(
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               )
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         onTap: () {
+  //                           print('hello');
+  //                           _imgBreedFromCamera();
+  //                           Navigator.pop(context);
+  //                         },
+  //                       ),
+  //                     ),
+  //                   ))
+  //                 ],
+  //               )),
+  //         );
+  //       });
+  // }
+  //
+  // void _showDiseaseImagePicker(BuildContext context) {
+  //   showModalBottomSheet(
+  //       backgroundColor: Colors.transparent,
+  //       context: context,
+  //       builder: (builder) {
+  //         return Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Container(
+  //               width: MediaQuery.of(context).size.width,
+  //               height: MediaQuery.of(context).size.height / 5.2,
+  //               margin: const EdgeInsets.only(top: 8.0),
+  //               padding:
+  //                   const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+  //               decoration: BoxDecoration(
+  //                   color: kSecondaryColor,
+  //                   borderRadius: BorderRadius.circular(25)),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Expanded(
+  //                       child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15),
+  //                     child: Material(
+  //                       color: kSecondaryColor,
+  //                       child: InkWell(
+  //                         child: Padding(
+  //                           padding: const EdgeInsets.symmetric(horizontal: 10),
+  //                           child: Row(
+  //                             children: [
+  //                               const Icon(
+  //                                 Icons.photo_library_outlined,
+  //                                 size: 22.0,
+  //                               ),
+  //                               kSizedBoxW10,
+  //                               Text(
+  //                                 "Gallery",
+  //                                 textAlign: TextAlign.center,
+  //                                 style: kFilledButtonTextStyle.copyWith(
+  //                                     color: Colors.black),
+  //                               )
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         onTap: () {
+  //                           _imgDiseaseFromGallery();
+  //                           Navigator.pop(context);
+  //                         },
+  //                       ),
+  //                     ),
+  //                   )),
+  //                   const Padding(
+  //                     padding: EdgeInsets.symmetric(horizontal: 15.0),
+  //                     child: Divider(
+  //                       color: Colors.black12,
+  //                     ),
+  //                   ),
+  //                   Expanded(
+  //                       child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15),
+  //                     child: Material(
+  //                       color: kSecondaryColor,
+  //                       child: InkWell(
+  //                         child: Padding(
+  //                           padding:
+  //                               const EdgeInsets.symmetric(horizontal: 10.0),
+  //                           child: Row(
+  //                             crossAxisAlignment: CrossAxisAlignment.center,
+  //                             children: [
+  //                               const Icon(
+  //                                 Icons.camera_alt_outlined,
+  //                                 size: 22.0,
+  //                               ),
+  //                               kSizedBoxW10,
+  //                               Text(
+  //                                 "Camera",
+  //                                 textAlign: TextAlign.center,
+  //                                 style: kFilledButtonTextStyle.copyWith(
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               )
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         onTap: () {
+  //                           _imgDiseaseFromCamera();
+  //                           Navigator.pop(context);
+  //                         },
+  //                       ),
+  //                     ),
+  //                   ))
+  //                 ],
+  //               )),
+  //         );
+  //       });
+  // }
 
   void _showLoading(BuildContext context) {
     showDialog(
@@ -525,40 +507,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     getBreed(context);
-  }
-
-  _imgBreedFromCamera() async {
-    selectedBreedImageFile = null;
-    selectedBreedImagePath = '';
-
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-
-    if (image == null) return;
-
-    var imageMap = File(image.path);
-    setState(() {
-      selectedBreedImageFile = imageMap;
-      selectedBreedImagePath = image.path;
-    });
-
-    getDisease(context);
-  }
-
-  _imgDiseaseFromGallery() async {
-    selectedDiseaseImageFile = null;
-    selectedBreedImagePath = '';
-
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    if (image == null) return;
-
-    var imageMap = File(image.path);
-    setState(() {
-      selectedBreedImageFile = imageMap;
-      selectedBreedImagePath = image.path;
-    });
-
-    getDisease(context);
   }
 
   _imgDiseaseFromCamera() async {
@@ -877,7 +825,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             "AquaMate",
                             style: GoogleFonts.tiltNeon(
-                              color: Colors.blueGrey,
+                              color: kPrimaryColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
                             ),
@@ -914,9 +862,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     IconCardButton(
                       onPress: () {
-                        selectedBreedImageFile = null;
-                        selectedBreedImagePath = '';
-                        _showBreedImagePicker(context);
+                        // selectedBreedImageFile = null;
+                        // selectedBreedImagePath = '';
+                        // _showBreedImagePicker(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => const BreedIdentificationScreen()));
                       },
                       icon: FontAwesomeIcons.magnifyingGlass,
                       text: 'Identify Fish Breeds',
@@ -925,7 +875,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPress: () async {
                         selectedDiseaseImageFile = null;
                         selectedDiseaseImagePath = '';
-                        _showDiseaseImagePicker(context);
+                        // _showDiseaseImagePicker(context);
                       },
                       icon: FontAwesomeIcons.virusCovid,
                       text: 'Detect Fish Diseases',
@@ -999,7 +949,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     AboutIconCardButton(
                       onPress: () {
-                        final fish = FishData.fromJson(angleJson);
+                        final fish = FishData.fromJson(goldFishJson);
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => FishDetailsScreen(

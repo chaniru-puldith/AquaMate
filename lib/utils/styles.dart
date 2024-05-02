@@ -5,7 +5,7 @@ class Styles {
   static ThemeData themeData(BuildContext context) {
     return ThemeData(
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFF5F5F5),
         surfaceTintColor: Colors.white,
         shadowColor: Colors.black12,
       ),
