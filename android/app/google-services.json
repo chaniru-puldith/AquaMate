@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143690376235",
+    "project_id": "aquamate-59953",
+    "storage_bucket": "aquamate-59953.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143690376235:android:b306456e1f07e50fc2366e",
+        "android_client_info": {
+          "package_name": "com.example.aquamate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYcoktxVAdd2nZRir6vVrCHF4jwtKlEhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
