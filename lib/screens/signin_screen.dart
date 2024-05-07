@@ -75,7 +75,7 @@ class _SigninScreenState extends State<SigninScreen> {
         return PopScope(
           canPop: false,
           child: AlertDialog(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -442,8 +442,8 @@ class _SigninScreenState extends State<SigninScreen> {
                           'Sign Up',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

@@ -6,7 +6,8 @@ class FishData {
   final String diet;
   final String tankSize;
   final String description;
-  final String tankMates;
+  final String image;
+  final List tankMates;
 
   FishData(
       {required fishName,
@@ -16,6 +17,7 @@ class FishData {
       required diet,
       required tankSize,
       required description,
+      required image,
       required tankMates})
       : fishName = fishName ?? '',
         scientificName = scientificName ?? '',
@@ -24,7 +26,8 @@ class FishData {
         diet = diet ?? '',
         tankSize = tankSize ?? '',
         description = description ?? '',
-        tankMates = tankMates ?? '';
+        image = image ?? '',
+        tankMates = tankMates ?? [];
 
   factory FishData.fromJson(Map<dynamic, dynamic> json) {
     final fishData = FishData(
@@ -35,6 +38,7 @@ class FishData {
       diet: json['diet'],
       tankSize: json['tankSize'],
       description: json['description'],
+      image: json['image'],
       tankMates: json['tankMates'],
     );
     return fishData;

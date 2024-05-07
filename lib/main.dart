@@ -27,10 +27,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFFF5F5F5),
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Color(0xFFF5F5F5),
-        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Color(0xFF121212),
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Color(0xFF121212),
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
     final user = FirebaseAuth.instance.currentUser;

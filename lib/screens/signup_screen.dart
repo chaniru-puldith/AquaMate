@@ -707,7 +707,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {Navigator.pushReplacementNamed(context, '/signin');},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/signin');
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -716,8 +718,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           'Sign In',
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

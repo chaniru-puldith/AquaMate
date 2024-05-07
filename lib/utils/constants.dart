@@ -6,20 +6,24 @@ enum TextFieldTypes { password, email }
 enum SnackBarType { error, success }
 
 // Colors
-const kPrimaryColor = Colors.black;
+const kPrimaryColor = Color(0xFFF5F5F5);
 const kSecondaryColor = Color(0xFFF5F5F9);
 const kPrimaryThemeColor = Color(0xFF42A5F5);
 const kErrorColor = Color(0xFFFF5C5C);
-const kTextFieldUtilsColor = Color(0xFFA1A8B0);
+const kTextFieldUtilsColor = Color(0xFF484B4F);
 const kTextFieldFillColor = Color(0x0564B5F6);
 const kWelcomeDescriptionTextColor = Color(0xFF717784);
 const kSecondaryTextColor = Color(0xFFA1A8B0);
 const kSuccessColor = Color(0xFF76D3AC);
-const kBarrierColor = Color(0x50383838);
+const kBarrierColor = Color(0x90000000);
 
 // Text Styles
 const kPoppinsRegularTextStyle = TextStyle(
   fontSize: 16.0,
+);
+const kPoppinsBoldTextStyle = TextStyle(
+  fontSize: 18.0,
+  fontWeight: FontWeight.w700,
 );
 
 const kPoppinsHintTextStyle = TextStyle(
@@ -95,7 +99,7 @@ const kSizedBoxW10 = SizedBox(width: 10);
 const kSizedBoxW20 = SizedBox(width: 20);
 const kSizedBoxW30 = SizedBox(width: 30);
 
-//
+// jsons
 const arowanaJson = {
   'fishName': 'Arowana Fish',
   'scientificName': 'Osteoglossinae',
@@ -105,7 +109,16 @@ const arowanaJson = {
   'tankSize': 'At least 200 gallons (757 liters) for a single fish',
   'description':
       'Arowanas, also known as dragon fish, are a species of fish that are part of the ancient family of osteoglossidae. They inhabit the inland waters of South America, Southeast Asia, and Australia. Arowanas have elongated bodies covered with large scales and a distinct pair of barbells protruding from the tip of their lower jaw. They are highly predatory fish that you\'ll often see elegantly patrolling the surface of the water.\n\nArowanas can live over twenty years in captivity. They can grow up to 3 feet in length in their natural environment. The most common types of arowana kept in aquariums include the Silver Arowana and the Black Arowana.\n\nRemember, keeping an arowana is a long-term commitment. They require optimal care to flourish, including a suitable tank setup and a specific diet. They are not recommended for beginners due to their care requirements. But with proper care and attention, they can be a fascinating addition to your aquarium. Enjoy your journey into the world of Arowanas! 🐠',
-  'tankMates': 'Gold fish, Angle Fish, Betta Fish',
+  'image': 'assets/images/arowana.png',
+  'tankMates': [
+    {'name': 'Peacock Bass', 'image': 'assets/images/peacock_bass.png'},
+    {
+      'name': 'Bristlenose Plecos',
+      'image': 'assets/images/bristlenose_plecos.png'
+    },
+    {'name': 'Tinfoil Barbs', 'image': 'assets/images/tinfoil_barbs.png'},
+    {'name': 'Silver Dollars', 'image': 'assets/images/silver_dollars.png'},
+  ]
 };
 
 const angleJson = {
@@ -117,7 +130,19 @@ const angleJson = {
   'tankSize': 'At least 55 gallons (208 liters) for a group of 5-6 fish',
   'description':
       'Angelfish are unique, laterally compressed fish with a diamond-like shape due to their outward-pointing fins. Their vibrant scales flash hues of various colors, and they often have stripes for camouflage. Measuring about six inches long and eight inches tall, they are omnivorous, feeding on small invertebrates, algae, and other tiny creatures. Native to the fresh waters of tropical South America, they inhabit slow-moving water bodies with dense vegetation. Some species are saltwater dwellers. Angelfish are popular pets in home aquariums. Their distinctive shape and vibrant colors make them a favorite among aquarists. 🐠',
-  'tankMates': 'Gold fish, Angle Fish, Betta Fish',
+  'image': 'assets/images/angel.png',
+  'tankMates': [
+    {'name': 'Larger Tetras', 'image': 'assets/images/tetra.png'},
+    {'name': 'Gouramis', 'image': 'assets/images/gourami.png'},
+    {
+      'name': 'Corydoras Catfish',
+      'image': 'assets/images/corydoras_catfish.png'
+    },
+    {
+      'name': 'Bristlenose Plecos',
+      'image': 'assets/images/bristlenose_plecos.png'
+    },
+  ]
 };
 
 const goldFishJson = {
@@ -131,21 +156,22 @@ const goldFishJson = {
       'Minimum of 20 gallons (75 liters) is recommended for a single goldfish',
   'description':
       'Goldfish, or Carassius auratus, are domestic fish known for their vibrant colors and patterns. Originating from East Asia, they were domesticated nearly 2,000 years ago as ornamental fish. Their body shapes and colors vary greatly, with some being just a few inches long, while others can grow over a foot. As omnivores, they feed on small invertebrates and algae. Goldfish are one of the most popular aquarium fish and are commonly kept as pets in indoor aquariums. Their bright colors and easy care make them a favorite among aquarists. 🐠',
-  'tankMates': 'Gold fish, Angle Fish, Betta Fish',
-};
-
-const guppyJson = {
-  'fishName': 'Guppy Fish',
-  'scientificName': 'Poecilia reticulata',
-  'ph': 'pH 6.8-7.8',
-  'temp': '72-82°F (22-28°C)',
-  'diet':
-      'Flake food, pellets, and frozen or live brine shrimp, bloodworms, and daphnia',
-  'tankSize':
-      'Minimum tank size of 10 gallons (38 liters) is recommended for a small group',
-  'description':
-      'Guppy fish, or Poecilia reticulata, are small, vibrant freshwater aquarium fish native to northern South America. They belong to the Poeciliidae family, which includes other popular aquarium fish. In the wild, guppies have dull grey scales, but males bear colorful spots or stripes. Aquarium breeds sport bright colors and fanciful fin shapes. These fish are small, measuring between 0.5 and 2.5 inches long. As omnivores, they feed on a variety of food sources, including algae and insect larvae. Known for their adaptability, guppies thrive in many different environmental and ecological conditions. They are a popular choice for aquariums due to their bright colors and easy care. 🐠',
-  'tankMates': 'Gold fish, Angle Fish, Betta Fish',
+  'image': 'assets/images/goldfish.png',
+  'tankMates': [
+    {'name': 'Rosy Barbs', 'image': 'assets/images/rosy_barb.png'},
+    {
+      'name': 'Mountain Minnows',
+      'image': 'assets/images/white_cloud_mountain_minnows.png'
+    },
+    {
+      'name': 'Bristlenose Plecos',
+      'image': 'assets/images/bristlenose_plecos.png'
+    },
+    {
+      'name': 'Hillstream Loaches',
+      'image': 'assets/images/hillstream_loaches.png'
+    },
+  ]
 };
 
 const oscarJson = {
@@ -159,5 +185,6 @@ const oscarJson = {
       'Minimum of 75 gallons (284 liters) is recommended for a single goldfish',
   'description':
       'Oscar fish, or Astronotus ocellatus, are a species of cichlid native to tropical South America. They are known for their large size, growing up to 45 cm in length and 1.6 kg in weight. Oscars have grey or dark brown scales with yellow and orange spots in the wild, but breeders have developed various colors for home aquariums. As omnivores, they feed on both plant and animal matter. Despite their aggressive behavior, oscars are popular aquarium fish due to their vibrant colors and unique behavior. 🐠',
-  'tankMates': 'Best kept alone',
+  'image': 'assets/images/oscar.png',
+  'tankMates': []
 };

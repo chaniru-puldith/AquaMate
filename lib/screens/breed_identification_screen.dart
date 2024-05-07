@@ -20,7 +20,6 @@ class BreedIdentificationScreen extends StatefulWidget {
 }
 
 class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
-  File? selectedBreedImageFile;
   String selectedBreedImagePath = '';
   final picker = ImagePicker();
   bool _isFound = false;
@@ -33,28 +32,23 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
   }
 
   Future<void> _tfLteInit() async {
-    String? res = await Tflite.loadModel(
-        model: "assets/model/fish_breed.tflite",
-        labels: "assets/model/breed_labels.txt",
-        numThreads: 1, // defaults to 1
-        isAsset:
-            true, // defaults to true, set to false to load resources outside assets
-        useGpuDelegate:
-            false // defaults to false, set to true to use GPU delegate
-        );
+    await Tflite.loadModel(
+      model: "assets/model/fish_breed.tflite",
+      labels: "assets/model/breed_labels.txt",
+      numThreads: 1,
+      isAsset: true,
+      useGpuDelegate: false,
+    );
   }
 
   _pickImage(ImageSource source) async {
-    selectedBreedImageFile = null;
     selectedBreedImagePath = '';
 
     final XFile? image = await picker.pickImage(source: source);
 
     if (image == null) return;
 
-    var imageMap = File(image.path);
     setState(() {
-      selectedBreedImageFile = imageMap;
       selectedBreedImagePath = image.path;
     });
 
@@ -63,7 +57,9 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
 
   void _showBreedImagePicker(BuildContext context) {
     showModalBottomSheet(
+        useSafeArea: true,
         backgroundColor: Colors.transparent,
+        elevation: 0,
         context: context,
         builder: (builder) {
           return Padding(
@@ -71,11 +67,10 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height / 5.2,
-                margin: const EdgeInsets.only(top: 8.0),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 decoration: BoxDecoration(
-                  color: kSecondaryColor,
+                  color: const Color(0XFF212121),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: Column(
@@ -85,7 +80,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Material(
-                        color: kSecondaryColor,
+                        color: const Color(0XFF212121),
                         child: InkWell(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -93,6 +88,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                               children: [
                                 const Icon(
                                   Icons.photo_library_outlined,
+                                  color: Colors.white70,
                                   size: 22.0,
                                 ),
                                 kSizedBoxW10,
@@ -100,7 +96,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                                   "Gallery",
                                   textAlign: TextAlign.center,
                                   style: kFilledButtonTextStyle.copyWith(
-                                    color: Colors.black,
+                                    color: Colors.white70,
                                   ),
                                 )
                               ],
@@ -116,14 +112,14 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.0),
                       child: Divider(
-                        color: Colors.black12,
+                        color: Colors.white12,
                       ),
                     ),
                     Expanded(
                         child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Material(
-                        color: kSecondaryColor,
+                        color: const Color(0XFF212121),
                         child: InkWell(
                           child: Padding(
                             padding:
@@ -133,6 +129,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                               children: [
                                 const Icon(
                                   Icons.camera_alt_outlined,
+                                  color: Colors.white70,
                                   size: 22.0,
                                 ),
                                 kSizedBoxW10,
@@ -140,7 +137,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                                   "Camera",
                                   textAlign: TextAlign.center,
                                   style: kFilledButtonTextStyle.copyWith(
-                                    color: Colors.black,
+                                    color: Colors.white70,
                                   ),
                                 )
                               ],
@@ -161,18 +158,16 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
 
   void _getBreed(BuildContext context) {
     showDialog(
+        barrierColor: kBarrierColor,
         barrierDismissible: false,
         context: context,
         builder: (builder) {
           return AlertDialog(
+            backgroundColor: Colors.black,
             insetPadding: const EdgeInsets.all(30),
             content: Container(
               padding: const EdgeInsets.all(20),
               width: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 kSizedBoxH10,
                 const Text(
@@ -183,7 +178,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                 SizedBox(
                   width: 120,
                   height: 120,
-                  child: selectedBreedImageFile == null
+                  child: selectedBreedImagePath.isEmpty
                       ? CircleAvatar(
                           backgroundColor: Colors.grey.shade300,
                           child: const Icon(
@@ -207,14 +202,10 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
 
                     var output = await Tflite.runModelOnImage(
                       path: selectedBreedImagePath,
-                      numResults:
-                          5, // The number of classes your model predicts
-                      threshold:
-                          0.1, // Adjust this threshold as needed based on your model's confidence
-                      imageMean:
-                          0, // Default is 0 if you haven't applied any specific normalization during training
-                      imageStd:
-                          1, // Default is 1 if you haven't applied any specific normalization during training
+                      numResults: 5,
+                      threshold: 0.1,
+                      imageMean: 0,
+                      imageStd: 1,
                     );
 
                     if (output == null || output.isEmpty) {
@@ -239,7 +230,6 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                   onPressed: () {
                     setState(() {
                       selectedBreedImagePath = '';
-                      selectedBreedImageFile = null;
                     });
                     Navigator.pop(context);
                   },
@@ -291,6 +281,7 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'Breed Identification',
           textAlign: TextAlign.center,
@@ -315,33 +306,46 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                   SizedBox(
                     width: 300,
                     height: 300,
-                    child: Card(
-                      elevation: 6,
-                      shadowColor: kPrimaryThemeColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF121212),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(
+                          color: kPrimaryThemeColor.withOpacity(0.2),
+                        ),
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey.shade800, blurRadius: 5),
+                        ],
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: selectedBreedImageFile == null
+                        child: selectedBreedImagePath.isEmpty
                             ? const Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
                                     FontAwesomeIcons.fileCircleXmark,
+                                    color: kTextFieldUtilsColor,
                                     size: 100,
                                   ),
                                   kSizedBoxH10,
                                   Text('No image file selected'),
                                 ],
                               )
-                            : Image.file(
-                                File(selectedBreedImagePath),
-                                fit: BoxFit.cover,
+                            : ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(16)),
+                                child: Image.file(
+                                  File(selectedBreedImagePath),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                       ),
                     ),
                   ),
                 ],
               ),
-              kSizedBoxH20,
+              kSizedBoxH30,
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
                 height: 55,
@@ -363,81 +367,62 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                   children: [
                     Text(
                       'Predicted Breed :  $breed',
-                      style: kHeadlineTextStyle,
+                      style: kPoppinsBoldTextStyle,
                     ),
                     kSizedBoxH20,
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: 55,
                       child: RoundedOutlinedButton(
-                          onPressed: () {
-                            switch (breed) {
-                              case 'Angelfish':
-                                final fish = FishData.fromJson(angleJson);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => FishDetailsScreen(
-                                      image: Image.asset(
-                                        'assets/images/angel.jpg',
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.center,
-                                      ),
-                                      data: fish,
-                                    ),
+                        onPressed: () {
+                          switch (breed) {
+                            case 'Angelfish':
+                              final fish = FishData.fromJson(angleJson);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FishDetailsScreen(
+                                    data: fish,
                                   ),
-                                );
-                                break;
-                              case 'Arowana':
-                                final fish = FishData.fromJson(arowanaJson);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => FishDetailsScreen(
-                                      image: Image.asset(
-                                        'assets/images/arowana.jpg',
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.center,
-                                      ),
-                                      data: fish,
-                                    ),
+                                ),
+                              );
+                              break;
+                            case 'Arowana':
+                              final fish = FishData.fromJson(arowanaJson);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FishDetailsScreen(
+                                    data: fish,
                                   ),
-                                );
-                                break;
-                              case 'Goldfish':
-                                final fish = FishData.fromJson(goldFishJson);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => FishDetailsScreen(
-                                      image: Image.asset(
-                                        'assets/images/goldfish.jpg',
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.center,
-                                      ),
-                                      data: fish,
-                                    ),
+                                ),
+                              );
+                              break;
+                            case 'Goldfish':
+                              final fish = FishData.fromJson(goldFishJson);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FishDetailsScreen(
+                                    data: fish,
                                   ),
-                                );
-                                break;
-                              case 'Oscar':
-                                final fish = FishData.fromJson(oscarJson);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => FishDetailsScreen(
-                                      image: Image.asset(
-                                        'assets/images/oscar.jpg',
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.center,
-                                      ),
-                                      data: fish,
-                                    ),
+                                ),
+                              );
+                              break;
+                            case 'Oscar':
+                              final fish = FishData.fromJson(oscarJson);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => FishDetailsScreen(
+                                    data: fish,
                                   ),
-                                );
-                                break;
-                            }
-                          },
-                          child: const Text(
-                            'View Details',
-                            style: kOutlinedButtonTextStyle,
-                          )),
+                                ),
+                              );
+                              break;
+                          }
+                        },
+                        child: const Text(
+                          'Get More Details',
+                          style: kOutlinedButtonTextStyle,
+                        ),
+                      ),
                     )
                   ],
                 ),
