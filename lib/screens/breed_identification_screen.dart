@@ -29,6 +29,85 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
   void initState() {
     super.initState();
     _tfLteInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        barrierColor: kBarrierColor,
+        builder: (BuildContext context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          return AlertDialog(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: Container(
+              width: screenWidth,
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 102,
+                    width: 102,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: const Color(0xFFFFCD6D),
+                    ),
+                    child: const Icon(
+                      Icons.info_outline_rounded,
+                      color: Colors.white,
+                      size: 50,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    'Alert!',
+                    textAlign: TextAlign.center,
+                    style: kPoppinsHeadlineStyle.copyWith(
+                        fontSize: 19, fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                      'Please upload an image with only one subject. Images with multiple subjects, crowded scenes, or blurry content may result in incorrect predictions. Ensure the subject is clear and well-lit for the best accuracy in our predictions.',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(color: kSecondaryTextColor)),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 20, left: 10.0, right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 55,
+                          child: RoundedFilledButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Got it',
+                              style: kFilledButtonTextStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 
   Future<void> _tfLteInit() async {
@@ -202,19 +281,21 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
 
                     var output = await Tflite.runModelOnImage(
                       path: selectedBreedImagePath,
-                      numResults: 5,
-                      threshold: 0.1,
+                      numResults: 4,
+                      threshold: 0.9,
                       imageMean: 0,
                       imageStd: 1,
                     );
 
-                    if (output == null || output.isEmpty) {
-                      print('No matches');
-                    }
-
                     setState(() {
-                      breed = output![0]['label'];
-                      _isFound = true;
+                      if (output == null || output.isEmpty) {
+                        breed = 'No matches found';
+                        _isFound = true;
+                      } else {
+                        breed = output[0]['label'];
+                        _isFound = true;
+                        print(output);
+                      }
                     });
 
                     if (!mounted) return;
@@ -373,54 +454,57 @@ class _BreedIdentificationScreenState extends State<BreedIdentificationScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
                       height: 55,
-                      child: RoundedOutlinedButton(
-                        onPressed: () {
-                          switch (breed) {
-                            case 'Angelfish':
-                              final fish = FishData.fromJson(angleJson);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => FishDetailsScreen(
-                                    data: fish,
+                      child: Visibility(
+                        visible: breed != 'No matches found',
+                        child: RoundedOutlinedButton(
+                          onPressed: () {
+                            switch (breed) {
+                              case 'Angelfish':
+                                final fish = FishData.fromJson(angleJson);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => FishDetailsScreen(
+                                      data: fish,
+                                    ),
                                   ),
-                                ),
-                              );
-                              break;
-                            case 'Arowana':
-                              final fish = FishData.fromJson(arowanaJson);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => FishDetailsScreen(
-                                    data: fish,
+                                );
+                                break;
+                              case 'Arowana':
+                                final fish = FishData.fromJson(arowanaJson);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => FishDetailsScreen(
+                                      data: fish,
+                                    ),
                                   ),
-                                ),
-                              );
-                              break;
-                            case 'Goldfish':
-                              final fish = FishData.fromJson(goldFishJson);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => FishDetailsScreen(
-                                    data: fish,
+                                );
+                                break;
+                              case 'Goldfish':
+                                final fish = FishData.fromJson(goldFishJson);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => FishDetailsScreen(
+                                      data: fish,
+                                    ),
                                   ),
-                                ),
-                              );
-                              break;
-                            case 'Oscar':
-                              final fish = FishData.fromJson(oscarJson);
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => FishDetailsScreen(
-                                    data: fish,
+                                );
+                                break;
+                              case 'Oscar':
+                                final fish = FishData.fromJson(oscarJson);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => FishDetailsScreen(
+                                      data: fish,
+                                    ),
                                   ),
-                                ),
-                              );
-                              break;
-                          }
-                        },
-                        child: const Text(
-                          'Get More Details',
-                          style: kOutlinedButtonTextStyle,
+                                );
+                                break;
+                            }
+                          },
+                          child: const Text(
+                            'Get More Details',
+                            style: kOutlinedButtonTextStyle,
+                          ),
                         ),
                       ),
                     )

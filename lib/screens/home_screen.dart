@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aquamate/models/fish_data_model.dart';
 import 'package:aquamate/screens/breed_identification_screen.dart';
 import 'package:aquamate/screens/disease_detection_screen.dart';
+import 'package:aquamate/screens/manage_tank_screen.dart';
 import 'package:aquamate/utils/constants.dart';
 import 'package:aquamate/widgets/about_icon_card_button.dart';
 import 'package:aquamate/widgets/icon_card_button.dart';
@@ -429,6 +430,93 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: 'Detect Fish Diseases',
                     ),
                   ],
+                ),
+              ),
+              kSizedBoxH10,
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: RawMaterialButton(
+                  splashColor: Colors.black12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  onPressed: () async {
+                    await Future.delayed(const Duration(milliseconds: 300));
+
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ManageTankScreen()));
+                  },
+                  child: Container(
+                    height: 130,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: [
+                          kPrimaryThemeColor.withOpacity(0.03),
+                          kPrimaryThemeColor.withOpacity(0.05),
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          "assets/images/tankclean.png",
+                          height: 100,
+                        ),
+                        kSizedBoxW20,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 8.0, top: 8.0),
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: kPrimaryThemeColor.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          kPrimaryThemeColor.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      spreadRadius: 5,
+                                    )
+                                  ],
+                                ),
+                                child: const Text(
+                                  'Manage your tank',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Material(
+                                borderRadius: BorderRadius.circular(100),
+                                color: kPrimaryThemeColor.withOpacity(0.1),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(

@@ -26,6 +26,85 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   void initState() {
     super.initState();
     _tfLteInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        barrierColor: kBarrierColor,
+        builder: (BuildContext context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          return AlertDialog(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: Container(
+              width: screenWidth,
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 102,
+                    width: 102,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: const Color(0xFFFFCD6D),
+                    ),
+                    child: const Icon(
+                      Icons.info_outline_rounded,
+                      color: Colors.white,
+                      size: 50,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Text(
+                    'Alert!',
+                    textAlign: TextAlign.center,
+                    style: kPoppinsHeadlineStyle.copyWith(
+                        fontSize: 19, fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                      'Please upload an image with only one subject. Images with multiple subjects, crowded scenes, or blurry content may result in incorrect predictions. Ensure the subject is clear and well-lit for the best accuracy in our predictions.',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(color: kSecondaryTextColor)),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 20, left: 10.0, right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 55,
+                          child: RoundedFilledButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              'Got it',
+                              style: kFilledButtonTextStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 
   Future<void> _tfLteInit() async {
@@ -154,18 +233,16 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
 
   void _getDisease(BuildContext context) {
     showDialog(
+        barrierColor: kBarrierColor,
         barrierDismissible: false,
         context: context,
         builder: (builder) {
           return AlertDialog(
+            backgroundColor: Colors.black,
             insetPadding: const EdgeInsets.all(30),
             content: Container(
               padding: const EdgeInsets.all(20),
               width: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 kSizedBoxH10,
                 const Text(
@@ -200,19 +277,17 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
 
                     var output = await Tflite.runModelOnImage(
                       path: selectedDiseaseImagePath,
-                      numResults:
-                          5, // The number of classes your model predicts
-                      threshold:
-                          0.1, // Adjust this threshold as needed based on your model's confidence
-                      imageMean:
-                          0, // Default is 0 if you haven't applied any specific normalization during training
-                      imageStd:
-                          1, // Default is 1 if you haven't applied any specific normalization during training
+                      numResults: 7,
+                      threshold: 0.8,
+                      imageMean: 0,
+                      imageStd: 255.0,
                     );
 
                     if (output == null || output.isEmpty) {
                       print('No matches');
                     }
+
+                    print(output);
 
                     setState(() {
                       disease = output![0]['label'];

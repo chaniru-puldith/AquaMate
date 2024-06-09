@@ -40,32 +40,22 @@ class IconCardButton extends StatelessWidget {
         highlightElevation: 5,
         onPressed: onPress,
         // fillColor: const Color(0xFF212121),
-        constraints: BoxConstraints.tight(const Size(160, 160)),
+        constraints: BoxConstraints.tight(const Size(160, 150)),
         shape: RoundedRectangleBorder(
           // side: BorderSide(color: Colors.blueGrey.shade100),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback: (Rect bounds) => RadialGradient(
-                  center: Alignment.center,
-                  stops: const [.5, 3],
-                  // radius: 0.8,
-                  colors: [
-                    Colors.blue.shade500,
-                    kPrimaryThemeColor.withOpacity(0.7),
-                  ],
-                ).createShader(bounds),
-                child: Icon(
-                  icon,
-                  size: 80,
-                ),
+              Icon(
+                icon,
+                color: kPrimaryThemeColor.withOpacity(0.8),
+                size: 80,
               ),
+              kSizedBoxH10,
               Text(
                 text,
                 textAlign: TextAlign.center,

@@ -86,20 +86,22 @@ class AboutIconCardButton extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
-                      color: kPrimaryThemeColor.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                            color: kPrimaryThemeColor.withOpacity(0.5),
-                            blurRadius: 5,
-                            spreadRadius: 2)
-                      ]),
+                    color: kPrimaryThemeColor.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kPrimaryThemeColor.withOpacity(0.1),
+                        blurRadius: 5,
+                        spreadRadius: 5,
+                      )
+                    ],
+                  ),
                   width: 90,
-                  child: const Text(
+                  child: Text(
                     'More Details',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white70,
+                      color: Colors.white.withOpacity(0.8),
                     ),
                   ),
                 ),
